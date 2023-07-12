@@ -1,7 +1,7 @@
-# Cytokine Data Cleaning
+# Cytokine Data Processing
 - ??
 
-# mRNA Data Cleaning & Imputation
+# mRNA Data Processing
 - Identifying sample replicates, performing variance stabalizing transformation, and using the QRILC method to impute missing data
 
 # Proteomics Normalization
