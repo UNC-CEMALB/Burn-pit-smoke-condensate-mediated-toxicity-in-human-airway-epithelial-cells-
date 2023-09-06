@@ -22,7 +22,7 @@ cytokine_df = data.frame(read_excel("Input/Cytokine_Data_050423.xlsx", sheet = 2
 
 # first creating a `coldata` object that contains all the metadata for each sample
 coldata = unique(cytokine_df[,1:5]) %>%
-  filter(Dose %in% c(1,NA)) %>%
+  filter(Dose %in% c(25,NA)) %>%
   select(-Dose) %>%
   # creating sample ids
   unite("SampleID", c(colnames(cytokine_df))[c(1,3,4)], sep = "_", remove = FALSE)
@@ -32,7 +32,7 @@ head(coldata)
 
 # making a `countdata` obj that contains cytokines as rows and sample names as cols
 countdata = cytokine_df %>%
-  filter(Dose %in% c(1,NA)) %>%
+  filter(Dose %in% c(25,NA)) %>%
   select(-Dose) %>%
   # creating sample ids
   unite("SampleID", c(colnames(cytokine_df)[c(1,3:4)]), sep = "_") %>%
@@ -187,6 +187,7 @@ plotRLE(ruv_set, outline=FALSE, ylim=c(-4, 4), col=colors[groups]) # GAVE ME A W
 # that there not be an intercept term through the use of '~0'
 
 ## HAD TO ROUND...NOT SURE IF THAT'S OK
+## CHANGE DESIGN TO INCLUDE SEX OR CONDENSATE
 dds <- DESeqDataSetFromMatrix(countData = round(counts(ruv_set)), # Grabbing count data from the 'ruv_set' object
                               colData = pData(ruv_set), # Grabbing the phenotype data and corresponding factor of unwanted variation from the 'ruv_set' object
                               design = ~0+groups+W_1) # Setting up the statistical formula (see below)
@@ -202,3 +203,39 @@ normcounts <- as.data.frame(counts(dds, normalized=TRUE))
 # Transforming normalized counts through variance stabilization
 vsd <- varianceStabilizingTransformation(dds, blind=FALSE)
 vsd_matrix <- as.matrix(assay(vsd))
+
+
+########### Running the differential expression statistical pipeline
+# SHOULD I BE RUNNING THIS WITH SVA???
+dds <- DESeq(dds, betaPrior=FALSE)      # because we used a user-defined model matrix, need to set betaPrior=FALSE
+
+
+treatment_groups = c("F", "S")
+significant_cytokines = c()
+for (i in 1:length(treatment_groups)){
+  
+  
+  # Pulling statistical results
+  res <- results(dds, pAdjustMethod = "BH", contrast = c("groups", treatment_groups[i], "PBS"))  #Statistical output with multiple test correction by the default, BH (aka FDR)
+  head(res)
+  
+  # Exporting statistical results:
+  res_df = as.data.frame(res)[order(res$padj),] 
+  filtered_res_df = res_df %>% 
+    filter(padj < 0.1) #filtering for only sig cytokines
+  write.csv(filtered_res_df, paste0(Output,"/", cur_date, "Stat_Results_", treatment_groups[i] ,".csv"))
+  
+  #count number of significantly associated cytokines
+  significant_cytokines = c(significant_cytokines, treatment_groups[i], length(filtered_res_df$padj))
+  
+}
+
+#putting significant cytokines into a table and exporting
+dim(significant_cytokines) = c(2, length(significant_cytokines)/2)
+sig_cytokines = data.frame(t(significant_cytokines))
+colnames(sig_cytokines) = c('Treatment', 'Cytokine Count')
+Model = rep('No', times = length(sig_cytokines$Treatment)) #adding a col denoting whether SVA was used or not
+sig_cytokines = cbind(sig_cytokines, Model)
+write.csv(sig_cytokines, paste0(Output,"/", cur_date, "Total_Sign_cytokines.csv", row.names = FALSE))
+
+# VENN DIAGRAMS: 3.1
