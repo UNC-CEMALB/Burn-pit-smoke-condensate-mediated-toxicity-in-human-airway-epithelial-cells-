@@ -17,9 +17,15 @@ This script was generated to support the manuscript titled 'Burn pit smoke conde
 - mRNA Data Processing: Averaged any replicates, applied VSN, and imputed missing data using the Quantile Regression Imputation of Left-Censored (QRILC) technique
 
 # 2. Biomarker Friedman Analysis (Table S2-S5?)
-- Testing for statistical differences across burn conditions (control, smoldering, and flaming) for each individual biomarker (mRNAs or cytokines) within low (1ug/cm2) and high (25ug/cm2) doses after a various exposure durations (4, 24, or 72 hours)
+- Testing for statistical differences across burn conditions (control, smoldering, and flaming) for each individual biomarker (mRNAs or cytokines) within low (1ug/cm2) and high (25ug/cm2) doses after various exposure durations (4, 24, or 72 hours)
 - Used a Friedman's test (non-parametric test for 3+ group comparisons) followed by Nemenyi's post hoc tests
 
 # 3. Biomarker Cluster Analysis (Figures 2-4)
 - Used Principal Component Analysis (PCA) to determine if and how exposure groups cluster based upon gene expression
 - Used hierarchical clustering in heatmap visualizations to determine if and how genes cluster based upon abundance across exposure groups
+
+# 4. Significant Biomarkers Visualization (Figure 5)
+- words
+
+# 5. Correlation Analysis (Figure 6?)
+- words
