@@ -1,0 +1,180 @@
+---
+title: "Burn_pit_smoke_condensate_Venn_diagram"
+author: "Arun Ghosh"
+date: "2024-02-12"
+output: html_document
+---
+
+```{r}
+#####################################################
+# Venn final script
+
+rm(list = ls(all.names = TRUE)) # clears the environment
+
+library("ggvenn") # for Venn diagram
+library(gridExtra)
+library(readxl)
+library(tidyverse)
+library(ggVennDiagram)
+
+setwd("C:/Users/agt4m/Desktop/IJ/DRAFT/CRT resubmission")
+
+FD_AP <- read_excel("Tables_112223.xlsx", sheet=5, skip = 1) # Fluidigm data
+```
+
+
+```{r}
+############# 4 HOURS' #######################################
+FD_AP_4h <- FD_AP[which(FD_AP$`Time Point` == 4),]# selecting 4 hours time point
+
+# SMOLDERING condensate data at 4 hours' time point
+Smol_4 <- FD_AP_4h[which(FD_AP_4h$Comparison == "Control vs. Smoldering"), ]
+
+CBs_4 <- Smol_4[which(Smol_4$Condensate == "Cardboard"), ]
+CBs_4 <- CBs_4[which(CBs_4$`P Value`< 0.1), ]
+CBs_4 <- CBs_4$`Variable Name` # Cardboard smoldering 4 hours
+CBs_4 <- unique(CBs_4)
+
+PLs_4 <- Smol_4[which(Smol_4$Condensate == "Plastic"), ]
+PLs_4 <- PLs_4[which(PLs_4$`P Value`< 0.1), ]
+PLs_4 <- PLs_4$`Variable Name` # Plastic smoldering 4 hours
+PLs_4 <- unique(PLs_4)
+
+# FLAMING condensate data at 4 hours' time point
+Flam_4 <- FD_AP_4h[which(FD_AP_4h$Comparison == "Control vs. Flaming"), ]
+
+CBf_4 <- Flam_4[which(Flam_4$Condensate == "Cardboard"), ]
+CBf_4 <- CBf_4[which(CBf_4$`P Value`< 0.1), ]
+CBf_4 <- CBf_4$`Variable Name` # Cardboard flaming 4 hours
+CBf_4 <- unique(CBf_4)
+
+PLf_4 <- Flam_4[which(Flam_4$Condensate == "Plastic"  ), ]
+PLf_4 <- PLf_4[which(PLf_4$`P Value`< 0.1), ]
+PLf_4 <- PLf_4$`Variable Name` # Plastic flaming 4 hours
+PLf_4 <- unique(PLf_4)
+```
+
+
+```{r}
+
+# Venn diagram of Fluidigm gene expression data at 4h time point
+
+x <- list(
+  CB_smol = CBs_4,
+  CB_flam = CBf_4,
+  PL_smol = PLs_4,
+  PL_flam = PLf_4
+)
+
+names(x) <- str_replace_all(names(x), c(CB_smol = "Cardboard\nSmoldering",
+                                        CB_flam = "Cardboard\nFlaming",
+                                        PL_smol = "Plastic\nSmoldering",
+                                        PL_flam = "Plastic\nFlaming"))
+
+ggvenn(x,
+       columns=NULL,
+       show_elements=FALSE,
+       show_percentage=FALSE,
+       digits=1,
+       fill_color=c("#0073C2FF", "#EFC000FF", "#868686FF", "#CD534CFF"),
+       fill_alpha=0.5,
+       stroke_color="black",
+       stroke_alpha=1,
+       stroke_size=0.5,
+       stroke_linetype="solid",
+       set_name_color="black",
+       set_name_size=7,
+       text_color="black",
+       text_size=5,
+       count_column=NULL,
+       auto_scale=FALSE 
+)+scale_y_continuous(expand = c(0.3,0.2))+
+  scale_x_continuous(expand = c(0.3,0.2))
+```
+
+
+
+```{r}
+x2<- process_region_data(Venn(x)) #collecting 4h intersect values
+x2 # to see names of the genes in the intersects
+```
+
+
+```{r}
+############# 24 HOURS' #####################################
+FD_AP_24h <- FD_AP[which(FD_AP$`Time Point` == 24),]# selecting 24 hours time point
+
+# SMOLDERING condensate data at 24 hours' time point
+Smol_24 <- FD_AP_24h[which(FD_AP_24h$Comparison == "Control vs. Smoldering"), ]
+
+CBs_24 <- Smol_24[which(Smol_24$Condensate == "Cardboard"), ]
+CBs_24 <- CBs_24[which(CBs_24$`P Value`< 0.1), ]
+CBs_24 <- CBs_24$`Variable Name` # Cardboard smoldering 24 hours
+CBs_24 <- unique(CBs_24)
+
+PLs_24 <- Smol_24[which(Smol_24$Condensate == "Plastic"), ]
+PLs_24 <- PLs_24[which(PLs_24$`P Value`< 0.1), ]
+PLs_24 <- PLs_24$`Variable Name` # Plastic smoldering 24 hours
+PLs_24 <- unique(PLs_24)
+
+# FLAMING condensate data at 24 hours' time point
+Flam_24 <- FD_AP_24h[which(FD_AP_24h$Comparison == "Control vs. Flaming"), ]
+
+CBf_24 <- Flam_24[which(Flam_24$Condensate == "Cardboard"), ]
+CBf_24 <- CBf_24[which(CBf_24$`P Value`< 0.1), ]
+CBf_24 <- CBf_24$`Variable Name` # Cardboard flaming 24 hours
+CBf_24 <- unique(CBf_24)
+
+PLf_24 <- Flam_24[which(Flam_24$Condensate == "Plastic"  ), ]
+PLf_24 <- PLf_24[which(PLf_24$`P Value`< 0.1), ]
+PLf_24 <- PLf_24$`Variable Name` # Plastic flaming 24 hours
+PLf_24 <- unique(PLf_24)
+
+```
+
+
+```{r}
+
+# Venn diagram of Fluidigm gene expression data at 24h time point
+
+z <- list(
+  CB_smol = CBs_24,
+  CB_flam = CBf_24,
+  PL_smol = PLs_24,
+  PL_flam = PLf_24
+)
+
+names(z) <- str_replace_all(names(z), c(CB_smol = "Cardboard\nSmoldering",
+                                        CB_flam = "Cardboard\nFlaming",
+                                        PL_smol = "Plastic\nSmoldering",
+                                        PL_flam = "Plastic\nFlaming"))
+
+ggvenn(z, 
+       columns=NULL,
+       show_elements=FALSE,
+       show_percentage=FALSE,
+       digits=1,
+       fill_color=c("#0073C2FF", "#EFC000FF", "#868686FF", "#CD534CFF"),
+       fill_alpha=0.5,
+       stroke_color="black",
+       stroke_alpha=1,
+       stroke_size=0.5,
+       stroke_linetype="solid",
+       set_name_color="black",
+       set_name_size=7,
+       text_color="black",
+       text_size=5,
+       count_column=NULL,
+       auto_scale=FALSE 
+)+scale_y_continuous(expand = c(0.3,0.2))+
+  scale_x_continuous(expand = c(0.3,0.2))
+```
+
+
+
+```{r}
+z2<- process_region_data(Venn(z)) #collecting 24h intersect values
+z2 # to see names of the genes in the intersects
+
+```
+
