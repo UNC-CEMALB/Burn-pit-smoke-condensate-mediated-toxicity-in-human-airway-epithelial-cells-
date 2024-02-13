@@ -1,0 +1,86 @@
+---
+title: "Spearman_correlation_final"
+author: "Arun Ghosh"
+date: "2024-02-12"
+output: html_document
+---
+```{r}
+# Burn pit smoke condensate first paper
+# correlation analysis
+
+rm(list = ls(all.names = TRUE)) # clears the environment
+
+library(tidyr)
+library(readxl)
+library(dplyr)
+library(psych)
+library(corrplot)
+
+###########################################################################
+
+setwd("C:/Users/agt4m/Desktop/IJ/DRAFT/CRT resubmission")
+
+##########################################################################
+# Reading in Polycyclic aromatic hydrocarbons (PAHs) values 
+# in burn pit smoke condensates
+
+PAHs <- read_excel("PAH_values.xlsx", sheet=1)
+head(PAHs)
+PAHs[, c(1)] <- list(NULL)
+PAHs = PAHs %>%
+  unite("SampleID", c(colnames(PAHs)[c(1:3)]), sep = "_") 
+head(PAHs)
+sapply(PAHs, class) #to make sure that PAH columns are numeric
+
+```
+
+
+
+```{r}
+
+##########################################################################
+# Reading in cytokine values (MSD)
+# in burn pit smoke condensate exposure groups
+
+MSD_data <- read_excel("Processed_Cyotkine_Data_081723.xlsx")
+
+MSD_data <- MSD_data %>%
+  pivot_wider(names_from = "Cytokine", values_from = "Norm_Cytokine_Conc") 
+
+MSD_data <-  MSD_data[ which(MSD_data$Condensate_Conc == '1'
+                             | MSD_data$Condensate_Conc == '25'), ]
+
+MSD_data = MSD_data %>%
+  unite("SampleID", c(colnames(MSD_data)[c(3:5)]), sep = "_")
+
+sapply(MSD_data, class) #to make sure that cytokine columns are numeric
+
+MSD_dataALL = MSD_data 
+MSD_dataALL[ ,c(1,2)] <- list(NULL)
+
+# calculating mean cytokine value in each exposure groups
+MSD_dataALL <- MSD_dataALL %>% 
+  group_by(SampleID) %>% 
+  summarise(across(everything(), mean)) 
+
+sapply(MSD_dataALL, class)
+
+```
+
+
+
+```{r}
+
+##################################################################
+# Spearman' test
+
+cor.matrix <-corr.test(MSD_dataALL[,2:ncol(MSD_dataALL)], PAHs[,2:ncol(PAHs)], 
+                       adjust = "none", method = "spearman")
+
+corrplot(cor.matrix$r, order="original", tl.col = "black",
+         p.mat = cor.matrix$p, sig.level = 0.05, insig = "blank",
+        tl.cex = 0.7, mar=c(0,0,1,0)) # significance level p<0.05
+
+```
+
+
