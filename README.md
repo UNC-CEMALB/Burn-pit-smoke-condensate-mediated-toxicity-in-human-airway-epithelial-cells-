@@ -16,16 +16,16 @@ This script was generated to support the manuscript titled 'Burn pit smoke conde
 - Cytokine Data Processing: Used variance stabalizing normalization (VSN) to normalize the data
 - mRNA Data Processing: Averaged any replicates, applied VSN, and imputed missing data using the Quantile Regression Imputation of Left-Censored (QRILC) technique
 
-# 2. Biomarker Friedman Analysis (Table S2-S5?)
+# 2. Biomarker Friedman Analysis (Table S2-S5)
 - Testing for statistical differences across burn conditions (control, smoldering, and flaming) for each individual biomarker (mRNAs or cytokines) within low (1ug/cm2) and high (25ug/cm2) doses after various exposure durations (4, 24, or 72 hours)
 - Used a Friedman's test (non-parametric test for 3+ group comparisons) followed by Nemenyi's post hoc tests
 
-# 3. Biomarker Cluster Analysis (Figures 2-4)
-- Used Principal Component Analysis (PCA) to determine if and how exposure groups cluster based upon gene expression
-- Used hierarchical clustering in heatmap visualizations to determine if and how genes cluster based upon abundance across exposure groups
+# 3. Biomarker Cluster Analysis (Figures 4,5,7)
+- Using Principal Component Analysis (PCA) to determine if and how exposure groups cluster based upon gene expression
+- Using hierarchical clustering in heatmap visualizations to determine if and how genes cluster based upon abundance across exposure groups
 
-# 4. Significant Biomarkers Visualization (Figure 5)
-- words
+# 4. Significant Biomarkers Visualization (Figure 6)
+- Venn diagrams to visualize significant (p value < 0.1) gene expression modulations across exposure groups at the higher dose (25 ug/cm^2)
 
-# 5. Correlation Analysis (Figure 6?)
-- words
+# 5. Correlation Analysis (Figure 8)
+- Determining correlations between cytokine and PAHs using Spearman's rank correlation tests
