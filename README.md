@@ -8,7 +8,7 @@ In the instance that the files are unable to rendered the NBViewer link can be c
 
 [Link to NBViewer](https://nbviewer.org/github/UNC-CEMALB/Burn-pit-smoke-condensate-mediated-toxicity-in-human-airway-epithelial-cells-/tree/main/)
 
-This script was generated to support the manuscript titled 'Burn pit smoke condensate-mediated toxicity in human airway epithelial cells', published in 2024 by Ghosh et. al (PMID:38652897).
+This script was generated to support the manuscript titled 'Burn pit smoke condensate-mediated toxicity in human airway epithelial cells', published in 2024 by Ghosh et. al (PMID:38652897). doi: 10.1021/acs.chemrestox.4c00064
 
 ![image](https://github.com/UNC-CEMALB/Burn-pit-smoke-condensate-mediated-toxicity-in-human-airway-epithelial-cells-/assets/69641855/fd33457d-0822-4788-91fc-ffbe044d2a6b)
 
